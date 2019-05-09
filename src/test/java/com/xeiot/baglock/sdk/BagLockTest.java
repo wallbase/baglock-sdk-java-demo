@@ -61,6 +61,10 @@ public class BagLockTest {
         // 3 微信小程序收到该秘钥后 执行开锁
     }
 
+    /**
+     * 测试生成读取开锁日志的密钥
+     * @throws DecoderException
+     */
     @Test
     public void readLog() throws DecoderException {
         String mac = "DC2C26BEAAC1";
