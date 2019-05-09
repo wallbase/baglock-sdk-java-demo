@@ -61,38 +61,6 @@ public class BagLockTest {
         // 3 微信小程序收到该秘钥后 执行开锁
     }
 
-    @Test
-    public void readLog() throws DecoderException {
-        String mac = "DC2C26BEAAC1";
-        int sn = 11111;
-        String userKey = "98765412546885";// 最长14个字节
-        // 开始时间,获取当前秒数，读全部时为 0xFFFFFFFF，即4294967295
-        long startTime = System.currentTimeMillis() / 1000;
-
-        //1 在安装时生成的箱包锁秘钥(加密和解密使用)
-        byte[] appKeyBuf = BaglockUtils.getAppKey(mac, sn, userKey);
-        logger.info("appKey {}", Hex.encodeHexString(appKeyBuf).toUpperCase());
-
-        byte[] readLogBuf = BaglockUtils.getReadLogBuf(startTime);
-        logger.info("未加密数据 {}", Hex.encodeHexString(readLogBuf).toUpperCase());
-
-        int crc = BagLockAESUtils.crc16(0, readLogBuf);
-        byte[] crcBuf = ByteBuffer.allocate(2).putShort((short) crc).array();
-        logger.info("CRC {}", Hex.encodeHexString(crcBuf).toUpperCase());
-
-        byte[] encrypt = BagLockAESUtils.encrypt(readLogBuf, appKeyBuf);
-        logger.info("加密结果 {}", Hex.encodeHexString(encrypt).toUpperCase());
-
-        byte[] sendData = ByteBuffer.allocate(20)
-                .put((byte) 0x10)
-                .put(encrypt)
-                .put((byte) 0x00)
-                .put(crcBuf)
-                .array();
-        logger.info("最终发送的数据 {}", Hex.encodeHexString(sendData).toUpperCase());
-        // 2 微信小程序收到该秘钥后 查询日志
-    }
-
     /**
      * 测试生成读取开锁日志的密钥
      * @throws DecoderException
