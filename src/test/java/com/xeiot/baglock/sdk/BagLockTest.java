@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
  */
 public class BagLockTest {
 
-    final Logger logger = LoggerFactory.getLogger(BagLockTest.class);
+    private final Logger logger = LoggerFactory.getLogger(BagLockTest.class);
 
     /**
      * 测试用appkey和秘钥生成并验证
